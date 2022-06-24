@@ -10,22 +10,18 @@ import com.teamvoy.shop.exception.JwtAuthenticationException;
 import com.teamvoy.shop.mapper.UserMapper;
 import com.teamvoy.shop.repository.UserRepository;
 import com.teamvoy.shop.security.UserSecurity;
-import com.teamvoy.shop.security.jwt.JwtFilter;
 import com.teamvoy.shop.security.jwt.JwtProvider;
 import com.teamvoy.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 
 @Slf4j

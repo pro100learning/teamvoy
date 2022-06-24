@@ -19,7 +19,7 @@ public class AuthenticationDTO {
     @NotNull
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 8, max = 64, message = "Password must be between 8 and 64 characters")
-    @Pattern(regexp = "(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?! [.\\n])(?=.*[AZ])(?=.*[az]).*$",
-            message = "The password can contain lowercase and uppercase Latin letters, numbers, and special characters")
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,64}+$",
+            message = "The password can contain lowercase and uppercase latin letters, and numbers")
     private String password;
 }
