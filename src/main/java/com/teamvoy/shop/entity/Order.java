@@ -10,7 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,13 +31,8 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Phone.class)
-    @JoinTable(
-            name = "order_phones",
-            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "phone_id", referencedColumnName = "id")
-    )
-    private Set<Phone> phones;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderPhone.class)
+    private List<OrderPhone> phones = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -44,6 +40,9 @@ public class Order {
 
     @Column(name = "price", nullable = false)
     private double price;
+
+    @Column(name = "paid", nullable = false)
+    private boolean paid;
 
     @CreationTimestamp
     @JsonSerialize(using = LocalDateTimeSerializer.class)

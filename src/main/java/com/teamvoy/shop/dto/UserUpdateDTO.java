@@ -33,7 +33,7 @@ public class UserUpdateDTO {
     @NotNull
     @NotBlank(message = "Phone cannot be empty")
     @Size(min = 10, max = 14, message = "Phone must be between 10 and 14 characters")
-    @Pattern(regexp = "/^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10, 14}(\\s*)?$/",
+    @Pattern(regexp = "[0-9]{10,15}",
             message = "The phone can contain numbers, and punctuation characters. Phone must be between 10 and 14 characters")
     private String phone;
 

@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -18,7 +18,7 @@ public class UserSecurity implements UserDetails {
     private String email;
     private String password;
     private boolean enabled;
-    private Set<Role> roles;
+    private List<Role> roles;
 
     private Collection<? extends GrantedAuthority> authorities;
 

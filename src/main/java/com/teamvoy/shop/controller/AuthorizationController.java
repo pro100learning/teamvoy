@@ -2,7 +2,6 @@ package com.teamvoy.shop.controller;
 
 import com.teamvoy.shop.dto.AuthenticationDTO;
 import com.teamvoy.shop.dto.UserCreateDTO;
-import com.teamvoy.shop.dto.UserDTO;
 import com.teamvoy.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

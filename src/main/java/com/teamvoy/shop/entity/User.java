@@ -4,7 +4,7 @@ import com.teamvoy.shop.entity.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,23 +35,22 @@ public class User {
     @Column(name = "password", length = 64, nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = Role.class)
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = Role.class)
     @CollectionTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
     )
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Set<Role> roles;
+    private List<Role> roles;
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
-
 
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Basket.class)
     private Basket basket;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
-    private Set<Order> orders;
+    private List<Order> orders;
 }

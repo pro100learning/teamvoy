@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
@@ -36,6 +37,20 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public Map<String, String> handleBadCredentialsException(BadCredentialsException ex) {
+        return Map.of("error", ex.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return Map.of("error", ex.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleNoSuchElementException(NoSuchElementException ex) {
         return Map.of("error", ex.getMessage());
     }
 }

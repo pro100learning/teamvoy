@@ -3,7 +3,8 @@ package com.teamvoy.shop.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,13 +24,8 @@ public class Basket {
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Phone.class)
-    @JoinTable(
-            name = "basket_phones",
-            joinColumns = @JoinColumn(name = "basket_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "phone_id", referencedColumnName = "id")
-    )
-    private Set<Phone> phones;
+    @OneToMany(mappedBy = "basket", fetch = FetchType.LAZY, targetEntity = BasketPhone.class)
+    private List<BasketPhone> phones = new ArrayList<>();
 
     @Column(name = "price", nullable = false)
     private double price;

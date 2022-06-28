@@ -1,10 +1,10 @@
 package com.teamvoy.shop.controller;
 
 import com.teamvoy.shop.annotation.CurrentUser;
-import com.teamvoy.shop.dto.UserDTO;
-import com.teamvoy.shop.dto.UserUpdateDTO;
+import com.teamvoy.shop.dto.BasketDTO;
+import com.teamvoy.shop.dto.BasketUpdateDTO;
 import com.teamvoy.shop.security.UserSecurity;
-import com.teamvoy.shop.service.UserService;
+import com.teamvoy.shop.service.BasketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,32 +14,32 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("user")
+@RequestMapping("basket")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UserController {
+public class BasketController {
 
-    private final UserService userService;
+    private final BasketService basketService;
 
     @GetMapping
-    public UserDTO details(
+    public BasketDTO details(
             @CurrentUser UserSecurity userSecurity
     ) {
-        return userService.getById(userSecurity.getId());
+        return basketService.getByUserId(userSecurity.getId());
     }
 
     @PutMapping
-    public UserDTO update(
-            @Valid @RequestBody UserUpdateDTO dto,
+    public BasketDTO details(
+            @Valid @RequestBody BasketUpdateDTO dto,
             @CurrentUser UserSecurity userSecurity
     ) {
-        dto.setId(userSecurity.getId());
-        return userService.update(dto);
+        dto.setUserId(userSecurity.getId());
+        return basketService.update(dto);
     }
 
     @DeleteMapping
-    public boolean delete(
+    public boolean clear(
             @CurrentUser UserSecurity userSecurity
     ) {
-        return userService.delete(userSecurity.getId());
+        return basketService.clear(userSecurity.getId());
     }
 }

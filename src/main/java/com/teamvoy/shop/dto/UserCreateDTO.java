@@ -2,7 +2,6 @@ package com.teamvoy.shop.dto;
 
 import lombok.*;
 
-import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 @Getter
@@ -30,14 +29,14 @@ public class UserCreateDTO {
     @NotNull
     @NotBlank(message = "Phone cannot be empty")
     @Size(min = 10, max = 14, message = "Phone must be between 10 and 14 characters")
-    @Pattern(regexp = "/^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10, 14}(\\s*)?$/",
+    @Pattern(regexp = "[0-9]{10,15}",
             message = "The phone can contain numbers, and punctuation characters. Phone must be between 10 and 14 characters")
     private String phone;
 
     @NotNull
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 8, max = 64, message = "Password must be between 8 and 64 characters")
-    @Pattern(regexp = "(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?! [.\\n])(?=.*[AZ])(?=.*[az]).*$",
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,64}+$",
             message = "The password can contain lowercase and uppercase Latin letters, numbers, and special characters")
     private String password;
 }

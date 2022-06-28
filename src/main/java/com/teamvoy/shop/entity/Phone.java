@@ -3,7 +3,7 @@ package com.teamvoy.shop.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,9 +37,9 @@ public class Phone {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "phones", fetch = FetchType.LAZY, targetEntity = Basket.class)
-    private Set<Basket> baskets;
+    @OneToMany(mappedBy = "phone", fetch = FetchType.LAZY, targetEntity = BasketPhone.class)
+    private List<BasketPhone> baskets;
 
-    @ManyToMany(mappedBy = "phones", fetch = FetchType.LAZY, targetEntity = Order.class)
-    private Set<Order> orders;
+    @OneToMany(mappedBy = "phone", fetch = FetchType.LAZY, targetEntity = OrderPhone.class)
+    private List<OrderPhone> orders;
 }

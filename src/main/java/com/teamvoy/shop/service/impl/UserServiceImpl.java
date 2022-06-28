@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -39,14 +39,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean create(UserCreateDTO dto) {
-        if(userRepository.findByEmail(dto.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new BadCredentialsException("This email is busy");
         }
-        if(userRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new BadCredentialsException("This email is busy");
+        if (userRepository.findByPhone(dto.getPhone()).isPresent()) {
+            throw new BadCredentialsException("This phone is busy");
         }
         User entity = userMapper.toEntity(dto);
-        entity.setRoles(Set.of(Role.ROLE_USER));
+        entity.setRoles(List.of(Role.ROLE_USER));
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         entity.setEnabled(true);
         userRepository.save(entity);
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
                 .build();
-        if(updateToken) {
+        if (updateToken) {
             userRepository.save(user);
             //the email has been updated, so you need to update the email in the JWT
             throw new JwtAuthenticationException("Log in again");
