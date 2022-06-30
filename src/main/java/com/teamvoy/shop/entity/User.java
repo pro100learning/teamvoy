@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
@@ -47,10 +48,11 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-
+    @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Basket.class)
     private Basket basket;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
     private List<Order> orders;
 }

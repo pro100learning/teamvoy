@@ -32,7 +32,7 @@ public interface BasketMapper {
                             .amount(phone.getAmount())
                             .color(phone.getColor())
                             .description(phone.getDescription())
-                            .amountInBasket(basketPhone.getAmount())
+                            .amountIn(basketPhone.getAmount())
                             .build();
                 })
                 .collect(Collectors.toList());

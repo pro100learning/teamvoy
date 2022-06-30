@@ -49,7 +49,7 @@ public class PhoneServiceImpl implements PhoneService {
     @Override
     public boolean delete(Long phoneId) {
         phoneRepository.deleteById(phoneId);
-        return false;
+        return true;
     }
 
     @Override

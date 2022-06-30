@@ -1,5 +1,6 @@
 package com.teamvoy.shop.service.impl;
 
+import com.teamvoy.shop.annotation.CurrentUser;
 import com.teamvoy.shop.dto.AuthenticationDTO;
 import com.teamvoy.shop.dto.UserCreateDTO;
 import com.teamvoy.shop.dto.UserDTO;
@@ -15,14 +16,17 @@ import com.teamvoy.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -64,10 +68,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO update(UserUpdateDTO dto) {
         User user = userRepository.findById(dto.getId()).orElseThrow();
+        if (!user.getEmail().equals(dto.getEmail()) && userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new BadCredentialsException("This email is busy");
+        }
+        if (!user.getPhone().equals(dto.getPhone()) && userRepository.findByPhone(dto.getPhone()).isPresent()) {
+            throw new BadCredentialsException("This phone is busy");
+        }
         boolean updateToken = !user.getEmail().equals(dto.getEmail());
         user = user.toBuilder()
-                .name(dto.getName())
                 .surname(dto.getSurname())
+                .name(dto.getName())
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
                 .build();
@@ -92,11 +102,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public String login(AuthenticationDTO dto) {
+    public Map<String, String> login(AuthenticationDTO dto) {
         UserSecurity user = (UserSecurity) authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()))
                 .getPrincipal();
 
-        return jwtProvider.generateToken(user);
+        return Map.of("token", jwtProvider.generateToken(user));
     }
 }

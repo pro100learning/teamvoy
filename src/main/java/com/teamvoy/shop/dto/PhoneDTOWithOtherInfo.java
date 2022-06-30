@@ -4,6 +4,8 @@ import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -23,5 +25,5 @@ public class PhoneDTOWithOtherInfo {
 
     private String description;
 
-    private int amountInBasket;
+    private int amountIn;
 }

@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "phones")
@@ -37,9 +38,11 @@ public class Phone {
     @Column(name = "description")
     private String description;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "phone", fetch = FetchType.LAZY, targetEntity = BasketPhone.class)
     private List<BasketPhone> baskets;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "phone", fetch = FetchType.LAZY, targetEntity = OrderPhone.class)
     private List<OrderPhone> orders;
 }

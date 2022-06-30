@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -16,11 +17,13 @@ public class OrderPhone {
     @EmbeddedId
     private OrderPhonePK id;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Order.class)
     @MapsId("orderId")
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Phone.class)
     @MapsId("phoneId")
     @JoinColumn(name = "phone_id", referencedColumnName = "id")

@@ -9,18 +9,18 @@ public interface OrderService {
 
     OrderDTO create(Long userId);
 
-    OrderDTO getById(Long orderId);
+    OrderDTO getById(Long orderId, Long userId);
 
     OrderDTO update(OrderUpdateDTO dto);
 
-    boolean delete(Long orderId);
+    boolean delete(Long orderId, Long userId);
 
     List<OrderDTO> getAll();
 
 
     List<OrderDTO> getAllByUser(Long userId);
 
-    OrderDTO pay(Long orderId);
+    OrderDTO pay(Long orderId, Long userId);
 
     void checkIfPaid(Long orderId);
 }

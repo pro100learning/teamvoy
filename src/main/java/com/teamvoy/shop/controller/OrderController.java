@@ -23,17 +23,18 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public List<OrderDTO> orders(
+    public List<OrderDTO> getAllOrders(
             @CurrentUser UserSecurity userSecurity
     ) {
         return orderService.getAllByUser(userSecurity.getId());
     }
 
     @GetMapping("{id}")
-    public OrderDTO details(
-            @PathVariable("id") Long orderId
+    public OrderDTO getOrder(
+            @PathVariable("id") Long orderId,
+            @CurrentUser UserSecurity userSecurity
     ) {
-        return orderService.getById(orderId);
+        return orderService.getById(orderId, userSecurity.getId());
     }
 
     @PostMapping
@@ -48,22 +49,26 @@ public class OrderController {
 
     @PostMapping("{id}")
     public OrderDTO pay(
-            @PathVariable("id") Long orderId
+            @PathVariable("id") Long orderId,
+            @CurrentUser UserSecurity userSecurity
     ) {
-        return orderService.pay(orderId);
+        return orderService.pay(orderId, userSecurity.getId());
     }
 
     @PutMapping
     public OrderDTO update(
-            @Valid @RequestBody OrderUpdateDTO dto
+            @Valid @RequestBody OrderUpdateDTO dto,
+            @CurrentUser UserSecurity userSecurity
     ) {
+        dto.setUserId(userSecurity.getId());
         return orderService.update(dto);
     }
 
     @DeleteMapping("{id}")
     public boolean delete(
-            @PathVariable("id") Long orderId
+            @PathVariable("id") Long orderId,
+            @CurrentUser UserSecurity userSecurity
     ) {
-        return orderService.delete(orderId);
+        return orderService.delete(orderId, userSecurity.getId());
     }
 }

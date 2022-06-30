@@ -5,6 +5,8 @@ import com.teamvoy.shop.dto.UserCreateDTO;
 import com.teamvoy.shop.dto.UserDTO;
 import com.teamvoy.shop.dto.UserUpdateDTO;
 
+import java.util.Map;
+
 public interface UserService {
 
     boolean create(UserCreateDTO dto);
@@ -16,5 +18,5 @@ public interface UserService {
     boolean delete(Long userId);
 
 
-    String login(AuthenticationDTO dto);
+    Map<String, String> login(AuthenticationDTO dto);
 }

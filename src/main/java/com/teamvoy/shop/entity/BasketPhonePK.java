@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Embeddable
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)

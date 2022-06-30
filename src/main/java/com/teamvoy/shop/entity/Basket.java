@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "baskets")
@@ -20,10 +21,12 @@ public class Basket {
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private Long id;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "basket", fetch = FetchType.LAZY, targetEntity = BasketPhone.class)
     private List<BasketPhone> phones = new ArrayList<>();
 

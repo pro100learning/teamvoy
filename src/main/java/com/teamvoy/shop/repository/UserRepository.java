@@ -1,5 +1,6 @@
 package com.teamvoy.shop.repository;
 
+import com.teamvoy.shop.entity.Order;
 import com.teamvoy.shop.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

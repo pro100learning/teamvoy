@@ -3,6 +3,7 @@ package com.teamvoy.shop.service.impl;
 import com.teamvoy.shop.dto.OrderDTO;
 import com.teamvoy.shop.dto.OrderUpdateDTO;
 import com.teamvoy.shop.entity.*;
+import com.teamvoy.shop.entity.enums.Role;
 import com.teamvoy.shop.entity.enums.Status;
 import com.teamvoy.shop.mapper.OrderMapper;
 import com.teamvoy.shop.repository.*;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
     private final BasketRepository basketRepository;
 
     private final PhoneRepository phoneRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public OrderDTO create(Long userId) {
@@ -58,12 +62,10 @@ public class OrderServiceImpl implements OrderService {
 
         Long orderId = order.getId();
 
-        order = order.toBuilder()
-                .phones(basket.getPhones().stream()
-                        .map(basketPhone -> basketPhoneToOrderPhone(basketPhone, orderId))
-                        .collect(Collectors.toList()))
-                .price(basket.getPrice())
-                .build();
+        order.setPhones(basket.getPhones().stream()
+                .map(basketPhone -> basketPhoneToOrderPhone(basketPhone, orderId))
+                .collect(Collectors.toList()));
+        order.setPrice(basket.getPrice());
         order.setPhones(orderPhoneRepository.saveAll(order.getPhones()));
         order = orderRepository.save(order);
 
@@ -80,7 +82,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderDTO getById(Long orderId) {
+    public OrderDTO getById(Long orderId, Long userId) {
+        checkIfUserIsOwnerOrManager(orderId, userId);
         return orderMapper.toOrderDTO(
                 orderRepository.findById(orderId).orElseThrow()
         );
@@ -88,6 +91,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO update(OrderUpdateDTO dto) {
+        checkIfUserIsOwnerOrManager(dto.getId(), dto.getUserId());
         Order order = orderRepository.findById(dto.getId()).orElseThrow();
         order.setStatus(dto.getStatus());
         return orderMapper.toOrderDTO(
@@ -96,7 +100,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean delete(Long orderId) {
+    public boolean delete(Long orderId, Long userId) {
+        checkIfUserIsOwnerOrManager(orderId, userId);
         Order order = orderRepository.findById(orderId).orElseThrow();
         orderPhoneRepository.deleteAll(order.getPhones());
         orderRepository.delete(order);//it is better to just throw this order in the archive to save the general statistics
@@ -120,11 +125,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO pay(Long orderId) {
+    public OrderDTO pay(Long orderId, Long userId) {
+        checkIfUserIsOwnerOrManager(orderId, userId);
         Order order = orderRepository.findById(orderId).orElseThrow();
         order.setStatus(Status.PAID);
         order.setPaid(true);
-        orderRepository.save(order);
         return orderMapper.toOrderDTO(
                 orderRepository.save(order)
         );
@@ -136,10 +141,18 @@ public class OrderServiceImpl implements OrderService {
             Thread.sleep(1 * 60 * 1000);
             Order order = orderRepository.findById(orderId).orElseThrow();
             if(!order.isPaid()) {
-                delete(orderId);
+                orderPhoneRepository.deleteAll(order.getPhones());
+                orderRepository.delete(order);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void checkIfUserIsOwnerOrManager(Long orderId, Long userId) {
+        if(orderRepository.getByOrderIdAndUserId(orderId, userId).isEmpty() &&
+                !userRepository.findById(userId).orElseThrow().getRoles().contains(Role.ROLE_MANAGER)) {
+            throw new BadCredentialsException("You do not have access");
         }
     }
 

@@ -32,7 +32,7 @@ public interface OrderMapper {
                             .amount(phone.getAmount())
                             .color(phone.getColor())
                             .description(phone.getDescription())
-                            .amountInBasket(orderPhone.getAmount())
+                            .amountIn(orderPhone.getAmount())
                             .build();
                 })
                 .collect(Collectors.toList());

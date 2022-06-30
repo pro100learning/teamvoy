@@ -21,19 +21,18 @@ public class PhoneController {
     private final PhoneService phoneService;
 
     @GetMapping
-    public List<PhoneDTO> phones() {
+    public List<PhoneDTO> getAllPhones() {
         return phoneService.getAll();
     }
 
     @GetMapping("{id}")
-    public PhoneDTO details(
+    public PhoneDTO getPhone(
             @PathVariable("id") Long phoneId
     ) {
         return phoneService.getById(phoneId);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public PhoneDTO create(
             @Valid @RequestBody PhoneDTO dto
     ) {
@@ -41,7 +40,6 @@ public class PhoneController {
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public PhoneDTO update(
             @Valid @RequestBody PhoneDTO dto
     ) {
@@ -49,7 +47,6 @@ public class PhoneController {
     }
 
     @DeleteMapping("{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public boolean delete(
             @PathVariable("id") Long phoneId
     ) {
@@ -58,7 +55,7 @@ public class PhoneController {
 
 
     @GetMapping("count")
-    public Map<String, Long> getCount() {
+    public Map<String, Long> getPhonesCount() {
         return Map.of("count", phoneService.getCount());
     }
 }

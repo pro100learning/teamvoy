@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
@@ -27,10 +28,12 @@ public class Order {
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private Long id;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderPhone.class)
     private List<OrderPhone> phones = new ArrayList<>();
 

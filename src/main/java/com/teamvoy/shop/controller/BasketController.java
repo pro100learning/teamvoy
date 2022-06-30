@@ -21,14 +21,14 @@ public class BasketController {
     private final BasketService basketService;
 
     @GetMapping
-    public BasketDTO details(
+    public BasketDTO getBasket(
             @CurrentUser UserSecurity userSecurity
     ) {
         return basketService.getByUserId(userSecurity.getId());
     }
 
     @PutMapping
-    public BasketDTO details(
+    public BasketDTO update(
             @Valid @RequestBody BasketUpdateDTO dto,
             @CurrentUser UserSecurity userSecurity
     ) {

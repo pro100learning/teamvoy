@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -16,11 +17,13 @@ public class BasketPhone {
     @EmbeddedId
     private BasketPhonePK id;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Basket.class)
     @MapsId("basketId")
     @JoinColumn(name = "basket_id", referencedColumnName = "id")
     private Basket basket;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Phone.class)
     @MapsId("phoneId")
     @JoinColumn(name = "phone_id", referencedColumnName = "id")
